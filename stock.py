@@ -1,8 +1,3 @@
-# stock seacher / analysis
-# elon monitor, random stock picker
-# Stock position simulator
-# % increase expected? take profit levels
-
 #Imports
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -96,7 +91,6 @@ def yahooNoPrint():
     #Fetch yahoo
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper())
     time.sleep(3)
-    #driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
     page = driver.find_element(By.XPATH, "/html/body").text
     #BASICS
     basics = page[page.find("Bid"):page.find("EPS")]
@@ -153,7 +147,6 @@ def insider():
     #Search
     driver.get("https://www.benzinga.com/sec/insider-trades/search/index?company_ticker=" + ticker)
     time.sleep(3)
-    #driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
     search = driver.find_element(By.XPATH,"/html/body").text
     insiderTotal = search[0:2000]
     while z < len(good_words):
