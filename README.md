@@ -29,4 +29,4 @@ The script utilizes Selenium for web scraping to gather information from differe
 - **Technicals:** Extracts technical indicators like RSI, institutional holdings, and stock performance.
 - **Position Sizer:** Helps determine the appropriate position size based on risk, confidence level, and available capital.
 
-Feel free to customize and adapt the script to suit your specific needs or preferences!
+Feel free to customize and adapt the script to suit your specific needs or preferences! 
