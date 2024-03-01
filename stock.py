@@ -6,35 +6,35 @@ import pyautogui
 import re
 import math
 
-#Request
+# Request user input
 ticker = input("Ticker: ")
-data = input("Full Analysis (y/n): ")
-if data == "n":
-    data = input("news OR info OR comunity: ")
+analysisType = input("Full Analysis (y/n): ").lower()
+if analysisType == "n":
+    analysisType = input("news OR info OR comunity: ").lower()
 price = 0.0
 
 def yahoo():
-    #Setup
+    # Webdriver Setup
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
     options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
 
-    #Fetch yahoo
+    # Fetch Yahoo Data
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper())
     time.sleep(3)
     #driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
     page = driver.find_element(By.XPATH, "/html/body").text
-    #BASICS
+    # Basics
     basics = page[page.find("Bid"):page.find("EPS")]
-    #CURRENT PRICE
+    # Current Price
     current = basics[basics.find("Bid")+4:basics.find(" x ")]
     if current == "0.00":
         current = basics[basics.find("Ask")+4:findnth(basics, "x", 1)-1]
     global price
     price = float(current)
-    #MARKET CAP
+    # Market Cap
     cap = page[(page.find("Market Cap") + 11):page.find("Beta")]
     if cap.find("M") > 1:
         cap = (float(cap[0:cap.find("M")]) * 1000000)
@@ -42,12 +42,12 @@ def yahoo():
         cap = (float(cap[0:cap.find("B")]) * 1000000000)
     elif cap.find("T") > 1:
         cap = (float(cap[0:cap.find("T")]) * 1000000000000)
-    #RETURN
+    # Print Results
     print("\n" + "\n" +"YAHOO FINANCE:" + "\n" + "Basics:" + "\n" + basics)
-    #BASIC EVALUATION
+    # Basic Evaluation
     basicEval = page[page.find("1y Target"):page.find("View details")]
     print("Basic Evaluation:" + "\n" + basicEval)
-    #GET OUTSTANDING
+    # Outstanding Shares
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper() + "/key-statistics")
     page = driver.find_element(By.XPATH, "/html/body").text
     share = page[(page.find("Shares Outstanding 5") + 20):page.find("Implied")+1]
@@ -59,7 +59,7 @@ def yahoo():
         share = (float(share[0:share.find("T")]) * 1000000000000)
     else:
         share = "N/A"
-    #FAIR SHARE PRICE
+    # Fair Share Price
     if share != "N/A":
         fair = float(cap/float(share))
         fairPrint = str(fair)
@@ -68,7 +68,7 @@ def yahoo():
     else:
         fairPrint = "N/A"
     print("\n" + "PERSONAL EVALUATIONS:" + "\n" + "Fair Share Price: $" + fairPrint)
-    #RESULTS
+    # Print Price Evaluation
     if fairPrint != "N/A":
         if fair > float(current):
             result = "Undervalued by: $" + (str(str(fair-float(current)))[0:(str(fair-float(current)).find(".")+3)])
@@ -80,20 +80,20 @@ def yahoo():
     driver.close()
 
 def yahooNoPrint():
-    #Setup
+    # Webdriver Setup
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
     options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
 
-    #Fetch yahoo
+    # Fetch Yahoo Data
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper())
     time.sleep(3)
     page = driver.find_element(By.XPATH, "/html/body").text
-    #BASICS
+    # Basics
     basics = page[page.find("Bid"):page.find("EPS")]
-    #CURRENT PRICE
+    # Current Price
     current = basics[basics.find("Ask")+4:findnth(basics, "x", 1)-1]
     if current == "0.00":
         current = basics[basics.find("Bid")+4:basics.find(" x ")]
@@ -102,17 +102,19 @@ def yahooNoPrint():
     driver.close()
 
 def reddit():
-    #Set up
+    # Webdriver Setup
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
+
+    # Sentiment Analysis Wordlist
     good = 0
     bad = 0
-    good_words = ['BUY', 'UP', 'GOOD', 'HOLD', 'HODL', 'BUYING']
-    bad_words = ['SELL', 'SELLING', 'DOWN', 'SELL NOW', 'TAKE PROFIT', 'BAD', 'FRAUD', 'DROP']
+    good_words = ['PHASE III', 'POSITIVE', 'TOP-LINE', 'SIGNIFICANT', 'TREATMENT', 'BUY', 'UP', 'GOOD', 'HOLD', 'HODL', 'BUYING']
+    bad_words = ['SELL', 'SELLING', 'DOWN', 'SELL NOW', 'TAKE PROFIT', 'BAD', 'FRAUD', 'DROP', 'SHORT']
     z = 0
 
-    #Search
+    # Sentiment Search
     driver.get("https://www.reddit.com/search/?q=" + ticker)
     searchP = driver.find_element(By.XPATH,"/html/body").text.upper()
     while z < len(good_words):
@@ -133,34 +135,23 @@ def findnth(string, substring, n):
    return len(string) - len(parts[-1]) - len(substring)
 
 def insider():
-    #Set up
+    # Webdriver Setup
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
-    good = 0
-    bad = 0
-    good_words = ['BUY']
-    bad_words = ['SELL']
-    z = 0
 
-    #Search
+    # Search and Count
     driver.get("https://www.benzinga.com/sec/insider-trades/search/index?company_ticker=" + ticker)
     time.sleep(3)
     search = driver.find_element(By.XPATH,"/html/body").text
     insiderTotal = search[0:2000]
-    while z < len(good_words):
-        good = good + insiderTotal.count(good_words[z])
-        z = z + 1
-    z = 0
-    while z < len(bad_words):
-        bad = bad + insiderTotal.count(bad_words[z])
-        z = z + 1
-    z = 0
+    good = insiderTotal.count('BUY')
+    bad = insiderTotal.count('SELL')
     print("\n" + "\n" + "INSIDER TRADING:" +"\n" + "Buys: " + str(good) + "\n" + "Sells: " + str(bad) + "\n" + "Total: " + str(good-bad))
     driver.close()
 
 def alpha():
-    #Set up
+    # Webdriver Setup
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
@@ -168,7 +159,7 @@ def alpha():
     options.add_argument("--enable-javascript")
     driver = webdriver.Chrome(options=options)
 
-    #Search analysis
+    # Search analysis
     driver.get("https://seekingalpha.com/symbol/" + ticker + "/analysis")
     time.sleep(3)
     search = driver.find_element(By.XPATH,"/html/body").text
@@ -182,13 +173,13 @@ def alpha():
     driver.close()
 
 def technicals():
-    #Set up
+    # Setup Webdriver
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
     print("\n" + "\n" + "TECHNICAL INFORMATION:")
 
-    #Search
+    # Search
     driver.get("https://stockcharts.com/freecharts/symbolsummary.html?sym=" + ticker)
     #RSI
     rsi = driver.find_element(By.XPATH,"/html/body/div[2]/div[3]/div/div[3]/div[2]/div/div[2]/table/tbody/tr[10]/td[2]").text
@@ -199,10 +190,10 @@ def technicals():
     else:
         rsiAnal = "Fair RSI"
     print("RSI: " + rsi + "   " + rsiAnal)
-    #institutions
+    # Institutions
     inst = driver.find_element(By.XPATH,"/html/body/div[2]/div[3]/div/div[3]/div[1]/div/div[2]/table/tbody/tr[10]/td[2]").text
     print("% Held by Institutions: " + inst + "%")
-    #Performance
+    # Performance
     Fday = driver.find_element(By.XPATH,"/html/body/div[2]/div[3]/div/div[3]/div[2]/div/div[2]/table/tbody/tr[4]/td[2]").text
     Omonth = driver.find_element(By.XPATH,"/html/body/div[2]/div[3]/div/div[3]/div[2]/div/div[2]/table/tbody/tr[5]/td[2]").text
     Tmonths = driver.find_element(By.XPATH,"/html/body/div[2]/div[3]/div/div[3]/div[2]/div/div[2]/table/tbody/tr[6]/td[2]").text
@@ -217,7 +208,7 @@ def technicals():
 
 
 def risk(accountSize, riskLevel, confidence, pos, direction):
-    #Setup
+    # Setup
     yahooNoPrint()
     accountSize = float(accountSize)
     riskLevel = int(riskLevel)
@@ -225,7 +216,7 @@ def risk(accountSize, riskLevel, confidence, pos, direction):
     pos = float(pos)
     print("\n" + "\n" + "POSITION SIZER:")
     
-    #Risk Factor
+    # Risk Factor
     if pos < price:
         return()
     if riskLevel == 1:
@@ -243,21 +234,21 @@ def risk(accountSize, riskLevel, confidence, pos, direction):
         print("Not enough free money for good transaction.")
         return()
 
-    #Long Position
-    if direction == "Long" or direction == "long":
+    # Long Position
+    if direction == "long":
         # Give 3 position options
         positionHigh = ("HIGH: Shares: " + str(mostShares) + "   Cost: $" + str(round((mostShares*price), 2)) + "   Stop Loss: $" + str(round((price - (riskSize/mostShares)), 2)))
         positionNormal = ("NORMAL: Shares: " + str(normShares) + "   Cost: $" + str(round((normShares*price), 2)) + "   Stop Loss: $" + str(round((price - (riskSize/normShares)), 2)))
         positionLow = ("LOW: Shares: " + str(lowShares) + "   Cost: $" + str(round((lowShares*price), 2)) + "   Stop Loss: $" + str(round((price - (riskSize/lowShares)), 2)))
         
-    #Short Position
-    if direction == "Short" or direction == "short":
+    # Short Position
+    if direction == "short":
         # Give 3 position options
         positionHigh = ("HIGH: Shares: " + str(mostShares) + "   Cost: $" + str(round((mostShares*price), 2)) + "   Stop Loss: $" + str(round((price + (riskSize/mostShares)), 2)))
         positionNormal = ("NORMAL: Shares: " + str(normShares) + "   Cost: $" + str(round((normShares*price), 2)) + "   Stop Loss: $" + str(round((price + (riskSize/normShares)), 2)))
         positionLow = ("LOW: Shares: " + str(lowShares) + "   Cost: $" + str(round((lowShares*price), 2)) + "   Stop Loss: $" + str(round((price + (riskSize/lowShares)), 2))) 
 
-    #Return
+    # Return
     if confidence >= 85:
         value = "High"
     elif confidence <= 25:
@@ -299,5 +290,5 @@ if riskQ == "y":
     b = input("Level of Risk Willing to Take (1-3): ")
     c = input("Confidence Level %: ")
     d = input("Max Amount of Free Money for Trade: $")
-    e = input("Long or Short?: ")
+    e = input("Long or Short?: ").lower()
     risk(a, b, c, d, e) 
