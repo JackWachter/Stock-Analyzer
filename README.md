@@ -2,8 +2,6 @@
 
 This Python script performs analysis on a stock using various sources such as Yahoo Finance, Reddit, insider trading data, Seeking Alpha, and technical analysis. It also includes a position sizer to help determine appropriate position sizing for a trade based on risk parameters.
 
-## How to Run
-
 ### Prerequisites
 
 - Python 3 installed on your system.
