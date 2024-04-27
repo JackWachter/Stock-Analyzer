@@ -7,7 +7,7 @@ This Python script performs analysis on a stock using various sources such as Ya
 - Python 3 installed on your system.
 - Chrome browser installed WITH up-to-date ChromeDrive in the same folder as stock.py.
 
-### Installation
+### Windows Installation
 
 1. Clone or download the script from the repository.
 2. Install the required dependencies using the provided `requirements.txt` file:
