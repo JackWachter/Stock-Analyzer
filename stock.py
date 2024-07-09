@@ -145,8 +145,8 @@ def insider():
     time.sleep(3)
     search = driver.find_element(By.XPATH,"/html/body").text
     insiderTotal = search[0:2000]
-    good = insiderTotal.count('BUY')
-    bad = insiderTotal.count('SELL')
+    good = insiderTotal.count('Purchase')
+    bad = insiderTotal.count('Sale')
     print("\n" + "\n" + "INSIDER TRADING:" +"\n" + "Buys: " + str(good) + "\n" + "Sells: " + str(bad) + "\n" + "Total: " + str(good-bad))
     driver.close()
 
