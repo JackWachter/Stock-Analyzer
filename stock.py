@@ -24,7 +24,7 @@ def yahoo():
     # Fetch Yahoo Data
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper())
     time.sleep(3)
-    #driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
+    #(If human auth is required) driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
     page = driver.find_element(By.XPATH, "/html/body").text
     # Basics
     basics = page[page.find("Bid"):page.find("EPS")]
