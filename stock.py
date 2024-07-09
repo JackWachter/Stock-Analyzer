@@ -8,9 +8,9 @@ import math
 
 # Request user input
 ticker = input("Ticker: ")
-analysisType = input("Full Analysis (y/n): ").lower()
-if analysisType == "n":
-    analysisType = input("news OR info OR comunity: ").lower()
+data = input("Full Analysis (y/n): ").lower()
+if data == "n":
+    data = input("news OR info OR comunity: ").lower()
 price = 0.0
 
 def yahoo():
@@ -35,7 +35,7 @@ def yahoo():
     global price
     price = float(current)
     # Market Cap
-    cap = page[(page.find("Market Cap") + 11):page.find("Beta")]
+    cap = page[(page.find("Market Cap (intraday)") + 22):page.find("Beta")]
     if cap.find("M") > 1:
         cap = (float(cap[0:cap.find("M")]) * 1000000)
     elif cap.find("B") > 1:
@@ -45,7 +45,7 @@ def yahoo():
     # Print Results
     print("\n" + "\n" +"YAHOO FINANCE:" + "\n" + "Basics:" + "\n" + basics)
     # Basic Evaluation
-    basicEval = page[page.find("1y Target"):page.find("View details")]
+    basicEval = page[page.find("1y Target"):page.find("1y Target") + 21] #:page.find("View details")]
     print("Basic Evaluation:" + "\n" + basicEval)
     # Outstanding Shares
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper() + "/key-statistics")
