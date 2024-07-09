@@ -1,8 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
-import pyautogui
 import re
 import math
 
@@ -24,7 +22,7 @@ def yahoo():
     # Fetch Yahoo Data
     driver.get("https://finance.yahoo.com/quote/" + ticker.upper())
     time.sleep(3)
-    #(If human auth is required) driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
+    # (If human auth is required) driver.find_element(By.XPATH, "//*[@id='myLightboxContainer']/section/button[1]").click()
     page = driver.find_element(By.XPATH, "/html/body").text
     # Basics
     basics = page[page.find("Bid"):page.find("EPS")]
@@ -104,14 +102,14 @@ def yahooNoPrint():
 def reddit():
     # Webdriver Setup
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
 
     # Sentiment Analysis Wordlist
     good = 0
     bad = 0
-    good_words = ['PHASE III', 'POSITIVE', 'TOP-LINE', 'SIGNIFICANT', 'TREATMENT', 'BUY', 'UP', 'GOOD', 'HOLD', 'HODL', 'BUYING']
-    bad_words = ['SELL', 'SELLING', 'DOWN', 'SELL NOW', 'TAKE PROFIT', 'BAD', 'FRAUD', 'DROP', 'SHORT']
+    good_words = ['PHASE III', 'POSITIVE', 'TOP-LINE', 'SIGNIFICANT', 'TREATMENT', 'BUY', 'UP', 'GOOD', 'HOLD', 'HODL', 'BUYING', 'PURCHASE', 'LONG', 'BULLISH', 'BULL']
+    bad_words = ['SELL', 'SELLING', 'DOWN', 'SELL NOW', 'TAKE PROFIT', 'BAD', 'FRAUD', 'DROP', 'SHORT', 'NEGATIVE', 'BEARISH', 'BEAR', 'DUMP', 'CRASH']
     z = 0
 
     # Sentiment Search
@@ -155,7 +153,7 @@ def alpha():
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     options.add_argument("--enable-javascript")
     driver = webdriver.Chrome(options=options)
 
