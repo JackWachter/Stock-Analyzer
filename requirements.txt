@@ -1,3 +1,1 @@
-selenium==3.141.0
-pyautogui==0.9.52
-# Chrome pre version 113
+selenium
