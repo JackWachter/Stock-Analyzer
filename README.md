@@ -1,6 +1,10 @@
 # Stock Analysis Script
 
-This Python script performs analysis on a stock using various sources such as Yahoo Finance, Reddit, insider trading data, Seeking Alpha, and technical analysis. It also includes a position sizer to help determine appropriate position sizing for a trade based on risk parameters.
+This Python script performs analysis on a stock using various sources such as Yahoo Finance, Reddit, insider trading data, Seeking Alpha, and technical analysis. It also includes a position sizer to help determine appropriate position sizing for a trade based on risk parameters.'
+
+### Demo Video
+
+<iframe width="640" height="480" src="https://www.youtube.com/embed/iKKsgiRyO9w" frameborder="0" allowfullscreen></iframe>
 
 ### Prerequisites
 
