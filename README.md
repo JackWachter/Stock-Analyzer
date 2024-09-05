@@ -4,7 +4,7 @@ This Python script performs analysis on a stock using various sources such as Ya
 
 ## Demo Video
 
-[![Demo]([https://i9.ytimg.com/vi/iKKsgiRyO9w/mqdefault.jpg?sqp=CMSM57YG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLByb3MpRV6l4k4nTlj7HBhpxcvbuw](https://daytradereview.com/wp-content/uploads/2019/11/Best-Stock-Analysis-Tools.jpg))](https://www.youtube.com/watch?v=iKKsgiRyO9w)
+[![Demo](https://daytradereview.com/wp-content/uploads/2019/11/Best-Stock-Analysis-Tools.jpg)](https://www.youtube.com/watch?v=iKKsgiRyO9w)
 
 ### Prerequisites
 
